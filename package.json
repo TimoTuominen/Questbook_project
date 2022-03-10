@@ -1,0 +1,22 @@
+{
+  "name": "guestbook",
+  "version": "1.0.0",
+  "description": "guestbook project",
+  "main": "questbook_server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TimoTuominen/Questbook_project.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TimoTuominen/Questbook_project/issues"
+  },
+  "homepage": "https://github.com/TimoTuominen/Questbook_project#readme",
+  "dependencies": {
+    "express": "^4.17.3"
+  }
+}
