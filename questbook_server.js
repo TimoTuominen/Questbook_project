@@ -1,4 +1,13 @@
-var http = require("http");
+const express = require("express");
+const app = express();
+
+const port = process.env.PORT || 3000;
+
+app.get("/", (req, res) => {
+  res.status(200).send("Hello, this is page 1");
+});
+
+/*var http = require("http");
 var fs = require("fs");
 var url = require("url");
 
@@ -28,4 +37,4 @@ var server = http.createServer(function (request, response) {
 
 var port = process.env.PORT || 3000;
 server.listen(port);
-console.log("Server is running at http://localhost:%d", port);
+console.log("Server is running at http://localhost:%d", port); */
