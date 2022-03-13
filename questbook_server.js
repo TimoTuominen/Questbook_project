@@ -1,12 +1,15 @@
 const express = require("express");
 const app = express();
-
-const port = process.env.PORT || 3000;
+var path = require("path");
 
 app.get("/", (req, res) => {
-  res.status(200).send("Hello, this is page 1");
+  res.status(200).sendFile(__dirname + "/Questbook_project/index.html");
 });
 
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log("server is running!");
+});
 /*var http = require("http");
 var fs = require("fs");
 var url = require("url");
