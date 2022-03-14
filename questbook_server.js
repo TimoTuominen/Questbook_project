@@ -16,18 +16,16 @@ const replaceTemplate = (temp, guestdata) => {
 const guestinfo = fs.readFileSync(`${__dirname}/guestinfo.html`, "utf8");
 const guestbook = fs.readFileSync(`${__dirname}/guestbook.html`, "utf8");
 
+const data = fs.readFileSync(`${__dirname}/questdata.json`, "utf8");
+let guestdata = JSON.parse(data);
+let guesthtml = guestdata.map((el) => replaceTemplate(guestinfo, el)).join("");
+const output = guestbook.replace("%guesttemplate%", guesthtml);
+
 app.get("/", (req, res) => {
   res.status(200).sendFile(__dirname + "/index.html");
 });
 
 app.get("/guestbook", (req, res) => {
-  const data = fs.readFileSync(`${__dirname}/questdata.json`, "utf8");
-  let guestdata = JSON.parse(data);
-  let guesthtml = guestdata
-    .map((el) => replaceTemplate(guestinfo, el))
-    .join("");
-  const output = guestbook.replace("%guesttemplate%", guesthtml);
-  console.log(guesthtml);
   res.end(output);
 });
 
