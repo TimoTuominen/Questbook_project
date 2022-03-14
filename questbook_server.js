@@ -3,7 +3,23 @@ const app = express();
 var path = require("path");
 
 app.get("/", (req, res) => {
-  res.status(200).sendFile(__dirname + "/Questbook_project/index.html");
+  res.status(200).sendFile(__dirname + "/index.html");
+});
+
+app.get("/guestbook", (req, res) => {
+  res.status(200).sendFile(__dirname + "/index.html");
+});
+
+app.get("/newmessage", (req, res) => {
+  res.status(200).sendFile(__dirname + "/index.html");
+});
+
+app.get("/ajaxmessage", (req, res) => {
+  res.status(200).sendFile(__dirname + "/index.html");
+});
+
+app.get("*", (req, res) => {
+  res.send("Cannot find the requested page", 404);
 });
 
 const port = process.env.PORT || 3000;
