@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 var path = require("path");
+app.use("/static", express.static("static"));
 
 app.get("/", (req, res) => {
   res.status(200).sendFile(__dirname + "/index.html");
@@ -28,7 +29,7 @@ app.listen(port, () => {
 });
 /*var http = require("http");
 var fs = require("fs");
-var url = require("url");
+var url = require("url");´´
 
 var server = http.createServer(function (request, response) {
   if (request.url === "/") {
