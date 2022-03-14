@@ -8,19 +8,15 @@ app.get("/", (req, res) => {
 });
 
 app.get("/guestbook", (req, res) => {
-  res.status(200).sendFile(__dirname + "/index.html");
+  res.status(200).sendFile(__dirname + "/guestbook.html");
 });
 
 app.get("/newmessage", (req, res) => {
-  res.status(200).sendFile(__dirname + "/index.html");
+  res.status(200).sendFile(__dirname + "/newmessage.html");
 });
 
 app.get("/ajaxmessage", (req, res) => {
-  res.status(200).sendFile(__dirname + "/index.html");
-});
-
-app.get("*", (req, res) => {
-  res.send("Cannot find the requested page", 404);
+  res.status(200).sendFile(__dirname + "/ajaxmessage.html");
 });
 
 const port = process.env.PORT || 3000;
