@@ -4,20 +4,31 @@ const app = express();
 var path = require("path");
 app.use("/static", express.static("static"));
 
-try {
-  const data = fs.readFileSync(`${__dirname}/questdata.json`, "utf8");
-  const guestdata = JSON.parse(data);
-  console.log(data);
-} catch (err) {
-  console.error(err);
-}
+const replaceTemplate = (temp, guestdata) => {
+  let output = temp.replace("{%Id%}", guestdata.id);
+  output = output.replace("{%User%}", guestdata.username);
+  output = output.replace("{%Country%}", guestdata.country);
+  output = output.replace("{%Date%}", guestdata.date);
+  output = output.replace("{%Message%}", guestdata.message);
+  return output;
+};
+
+const guestinfo = fs.readFileSync(`${__dirname}/guestinfo.html`, "utf8");
+const guestbook = fs.readFileSync(`${__dirname}/guestbook.html`, "utf8");
 
 app.get("/", (req, res) => {
   res.status(200).sendFile(__dirname + "/index.html");
 });
 
 app.get("/guestbook", (req, res) => {
-  res.status(200).sendFile(__dirname + "/guestbook.html");
+  const data = fs.readFileSync(`${__dirname}/questdata.json`, "utf8");
+  let guestdata = JSON.parse(data);
+  let guesthtml = guestdata
+    .map((el) => replaceTemplate(guestinfo, el))
+    .join("");
+  const output = guestbook.replace("%guesttemplate%", guesthtml);
+  console.log(guesthtml);
+  res.end(output);
 });
 
 app.get("/newmessage", (req, res) => {
