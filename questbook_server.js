@@ -1,7 +1,6 @@
 const express = require("express");
 const fs = require("fs");
 const app = express();
-//var path = require("path");
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/static", express.static("static"));
@@ -15,17 +14,15 @@ const replaceTemplate = (temp, guestdata) => {
   return output;
 };
 
-//let d = new Date(year, month, day);
-
 var utc = new Date().toJSON().slice(0, 10).replace(/-/g, "/");
 
 const guestinfo = fs.readFileSync(`${__dirname}/guestinfo.html`, "utf8");
 const guestbook = fs.readFileSync(`${__dirname}/guestbook.html`, "utf8");
 
-const data = fs.readFileSync(`${__dirname}/questdata.json`, "utf8");
+let data = fs.readFileSync(`${__dirname}/questdata.json`, "utf8");
 let guestdata = JSON.parse(data);
 let guesthtml = guestdata.map((el) => replaceTemplate(guestinfo, el)).join("");
-const output = guestbook.replace("%guesttemplate%", guesthtml);
+let output = guestbook.replace("%guesttemplate%", guesthtml);
 let guestlenght = guestdata.length;
 
 app.get("/", (req, res) => {
@@ -33,6 +30,11 @@ app.get("/", (req, res) => {
 });
 
 app.get("/guestbook", (req, res) => {
+  data = fs.readFileSync(`${__dirname}/questdata.json`, "utf8");
+  guestdata = JSON.parse(data);
+  guesthtml = guestdata.map((el) => replaceTemplate(guestinfo, el)).join("");
+  output = guestbook.replace("%guesttemplate%", guesthtml);
+  guestlenght = guestdata.length;
   res.end(output);
 });
 
@@ -49,8 +51,7 @@ app.post("/newmessage", (req, res) => {
     message: req.body.message
   };
   console.log(guestdata2);
-  //let data1 = JSON.parse(guestdata2);
-  //console.log(data1);
+
   guestdata.push(guestdata2);
   let newData = JSON.stringify(guestdata, null, 2);
   fs.writeFile("questdata.json", newData, (err) => {
@@ -59,8 +60,6 @@ app.post("/newmessage", (req, res) => {
 
     console.log("New data added");
   });
-
-  //res.status(200).sendFile(__dirname + "/newmessage.html");
 });
 
 app.get("/ajaxmessage", (req, res) => {
