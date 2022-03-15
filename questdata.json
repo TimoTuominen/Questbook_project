@@ -33,5 +33,19 @@
     "country": "Uganda",
     "date": "Tue Jul 22 2003 08:53:21 GMT+0300 (FLE Daylight Time)",
     "message": "Anyone from Africa here?"
+  },
+  {
+    "id": 6,
+    "username": "test",
+    "country": "tset",
+    "date": "2022/03/15",
+    "message": "tset"
+  },
+  {
+    "id": 7,
+    "username": "test",
+    "country": "tset",
+    "date": "2022/03/15",
+    "message": "tset"
   }
 ]

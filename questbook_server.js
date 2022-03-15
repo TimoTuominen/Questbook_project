@@ -46,14 +46,20 @@ app.post("/newmessage", (req, res) => {
     username: req.body.name,
     country: req.body.country,
     date: utc,
-    message: req.body.message,
+    message: req.body.message
   };
   console.log(guestdata2);
-  let data1 = JSON.stringify(guestdata2, null, 2);
-  fs.writeFile("questdata.json", data1, (err) => {
+  //let data1 = JSON.parse(guestdata2);
+  //console.log(data1);
+  guestdata.push(guestdata2);
+  let newData = JSON.stringify(guestdata, null, 2);
+  fs.writeFile("questdata.json", newData, (err) => {
+    // error checking
     if (err) throw err;
-    console.log("Data written to file");
+
+    console.log("New data added");
   });
+
   //res.status(200).sendFile(__dirname + "/newmessage.html");
 });
 
