@@ -115,19 +115,22 @@
       crossorigin="anonymous"
     ></script>
     <script type="text/javascript">
+      // Tästä alkaa AJAX tehtävä
+      // Haetaan DOM objectit
       let talukko = document.getElementById("taulukonbody");
       const taulukkobody = document.querySelector("#jsontaulukko > tbody");
 
+      // Funktio tietojen lataamista varten
       function lataatiedot() {
         const request = new XMLHttpRequest();
         request.open("get", "static/questdata.json", true);
-
+        // Tarkistetaan AJAX pyynnön tila, ja kun se on valmis, luetaan JSON tiedot käsittelyä varten
         request.onreadystatechange = function () {
           if (request.readyState == 4) {
             if (request.status == 200) {
               try {
                 const json = JSON.parse(request.responseText);
-                lisaatiedot(json);
+                lisaatiedot(json); // Lisää tiedot HTML:n puolle
               } catch (e) {
                 console.warn("Tietoja ei pystytty lataamaan");
               }
@@ -139,18 +142,20 @@
         };
         request.send();
       }
-
+      // Funktio tietojen lisäämistä varten
       function lisaatiedot(json) {
+        // Poistetaan "vanhat" tiedot taulukosta
         while (taulukkobody.firstChild) {
           taulukkobody.removeChild(taulukkobody.firstChild);
         }
         let numero = 0;
+        // Lisätään tiedot HTML documenttiin
         json.forEach((element) => {
           talukko.innerHTML += `<tr><td>${json[numero].id}</td><td>${json[numero].username}</td><td>${json[numero].country}</td><td>${json[numero].message}</td><td>${json[numero].id}</td></tr>`;
           numero++;
         });
       }
-
+      // Suoritetaan tietojen lataus
       window.addEventListener("DOMContentLoaded", (event) => {
         lataatiedot();
       });

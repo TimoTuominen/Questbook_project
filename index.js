@@ -3,8 +3,9 @@ const fs = require("fs");
 const app = express();
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use("/static", express.static("static"));
+app.use("/static", express.static("static")); // polku staattisille tiedostoille
 
+// korvataan html templatesta halutut kohdat JSON tiedoilla
 const replaceTemplate = (temp, guestdata) => {
   let output = temp.replace("{%Id%}", guestdata.id);
   output = output.replace("{%User%}", guestdata.username);
@@ -14,12 +15,14 @@ const replaceTemplate = (temp, guestdata) => {
   return output;
 };
 
+// Haetaan päivämäärä uuden vieraskirja merkinnän lisäämiseen
 var utc = new Date().toJSON().slice(0, 10).replace(/-/g, "/");
 
+// Luetaan tiedostoja käyttöä varten
 const guestinfo = fs.readFileSync(`${__dirname}/guestinfo.html`, "utf8");
 const guestbook = fs.readFileSync(`${__dirname}/guestbook.html`, "utf8");
-
 let data = fs.readFileSync(`${__dirname}/questdata.json`, "utf8");
+// Muokataan haettu data käsiteltävään muotoon, loopataan sen läpi ja funktion "replaceTemplate" avulla korvataan halutut kohdat
 let guestdata = JSON.parse(data);
 let guesthtml = guestdata.map((el) => replaceTemplate(guestinfo, el)).join("");
 let output = guestbook.replace("%guesttemplate%", guesthtml);
@@ -30,8 +33,8 @@ app.get("/", (req, res) => {
 });
 
 app.get("/guestbook", (req, res) => {
-  data = fs.readFileSync(`${__dirname}/questdata.json`, "utf8");
-  guestdata = JSON.parse(data);
+  data = fs.readFileSync(`${__dirname}/questdata.json`, "utf8"); // Haetaan tiedosto uudelleen päivittämistä varten
+  guestdata = JSON.parse(data); // Tehdään muutokset uudelleen päivittämisen jälkeen
   guesthtml = guestdata.map((el) => replaceTemplate(guestinfo, el)).join("");
   output = guestbook.replace("%guesttemplate%", guesthtml);
   guestlenght = guestdata.length;
@@ -43,6 +46,7 @@ app.get("/newmessage", (req, res) => {
 });
 
 app.post("/newmessage", (req, res) => {
+  // Luodaan JSON data lisäämistä varten
   let guestdata2 = {
     id: guestlenght + 1,
     username: req.body.name,
@@ -50,8 +54,7 @@ app.post("/newmessage", (req, res) => {
     date: utc,
     message: req.body.message
   };
-  console.log(guestdata2);
-
+  // Lisätään data ja muotoillaan JSON tiedosto nätimmäksi
   guestdata.push(guestdata2);
   let newData = JSON.stringify(guestdata, null, 2);
   fs.writeFile("questdata.json", newData, (err) => {
@@ -66,10 +69,14 @@ app.get("/ajaxmessage", (req, res) => {
   res.status(200).sendFile(__dirname + "/ajaxmessage.html");
 });
 
-app.post("/ajaxmessage", (req, res) => {
-  //  res.status(200).sendFile(__dirname + "/ajaxmessage.html");
+app.post("/ajaxmessage", (req, res) => {});
+
+// Käsitellään loput pyynnöt serverille
+app.get("*", (req, res) => {
+  res.send("Nothing to see here...");
 });
 
+//Määritetään portti ja aloitetaan kuuntelu
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log("server is running!");
