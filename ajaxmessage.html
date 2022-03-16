@@ -76,7 +76,7 @@
 
       <div class="row rivi1">
         <div class="col d-flex justify-content-left">
-          <table id="jsontaulukko" class="table table-striped table-hover">
+          <table id="jsontaulukko" class="table">
             <thead>
               <tr>
                 <th scope="col">Id</th>
@@ -86,7 +86,15 @@
                 <th scope="col">Message</th>
               </tr>
             </thead>
-            <tbody id="taulukko"></tbody>
+            <tbody id="taulukonbody">
+              <tr>
+                <td>testi</td>
+                <td>testi</td>
+                <td>testi</td>
+                <td>testi</td>
+                <td>testi</td>
+              </tr>
+            </tbody>
           </table>
         </div>
       </div>
@@ -107,20 +115,26 @@
       crossorigin="anonymous"
     ></script>
     <script type="text/javascript">
-      const xhr = new XMLHttpRequest();
-
+      let talukko = document.getElementById("taulukonbody");
       const taulukkobody = document.querySelector("#jsontaulukko > tbody");
-      console.log(taulukkobody);
 
       function lataatiedot() {
         const request = new XMLHttpRequest();
-        request.open("get", "static/questdata.json");
-        request.onload = () => {
-          try {
-            const json = JSON.parse(request.responseText);
-            lisaatiedot(json);
-          } catch (e) {
-            consoloe.warn("Tietoja ei pystytty lataamaan");
+        request.open("get", "static/questdata.json", true);
+
+        request.onreadystatechange = function () {
+          if (request.readyState == 4) {
+            if (request.status == 200) {
+              try {
+                const json = JSON.parse(request.responseText);
+                lisaatiedot(json);
+              } catch (e) {
+                console.warn("Tietoja ei pystytty lataamaan");
+              }
+            }
+            if (request.status == 404) {
+              console.log("tiedostoa ei löydy");
+            }
           }
         };
         request.send();
@@ -130,11 +144,14 @@
         while (taulukkobody.firstChild) {
           taulukkobody.removeChild(taulukkobody.firstChild);
         }
-
-        json.forEach((row) => {});
+        let numero = 0;
+        json.forEach((element) => {
+          talukko.innerHTML += `<tr><td>${json[numero].id}</td><td>${json[numero].username}</td><td>${json[numero].country}</td><td>${json[numero].message}</td><td>${json[numero].id}</td></tr>`;
+          numero++;
+        });
       }
 
-      document.addEventListener("DOMContentloaded", () => {
+      window.addEventListener("DOMContentLoaded", (event) => {
         lataatiedot();
       });
     </script>
