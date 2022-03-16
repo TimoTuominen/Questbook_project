@@ -66,6 +66,10 @@ app.get("/ajaxmessage", (req, res) => {
   res.status(200).sendFile(__dirname + "/ajaxmessage.html");
 });
 
+app.post("/ajaxmessage", (req, res) => {
+  //  res.status(200).sendFile(__dirname + "/ajaxmessage.html");
+});
+
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log("server is running!");
