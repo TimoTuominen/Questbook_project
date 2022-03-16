@@ -2,6 +2,9 @@
   "name": "guestbook",
   "version": "1.0.0",
   "description": "guestbook project",
+  "engines": {
+    "node": "16.x"
+  },
   "main": "questbook_server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
