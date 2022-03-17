@@ -69,7 +69,13 @@ app.get("/ajaxmessage", (req, res) => {
   res.status(200).sendFile(__dirname + "/ajaxmessage.html");
 });
 
-app.post("/ajaxmessage", (req, res) => {});
+app.post("/ajaxmessage", (req, res) => {
+  console.log(req.body);
+  let name2 = req.body.name;
+  let country2 = req.body.country;
+  let message2 = req.body.message;
+  res.status(204).send();
+});
 
 // Käsitellään loput pyynnöt serverille
 app.get("*", (req, res) => {
