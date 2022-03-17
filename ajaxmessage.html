@@ -64,12 +64,17 @@
               action="/ajaxmessage"
               name="submitform"
             >
-              Name: <input id="name" type="text" name="name" /> Country:
+              Name: <input id="name" type="text" name="name" /> Country: 
               <input id="country" type="text" name="country" /> Message:
               <input id="message" type="text" name="message" />
               <input id="painonappi" type="submit" value="Submit" />
             </form>
           </span>
+          <span
+            > <br></br>Ajax message välilehti tallentaa tiedot eri JSON tiedostoon kuin
+            New Message välilehti. Tämän välilehden kautta lisätyt sijaitsevat
+            /static kansiossa.</span
+          >
         </div>
       </div>
 
@@ -87,7 +92,6 @@
             </thead>
             <tbody id="taulukonbody"></tbody>
           </table>
-          <div id="status"></div>
         </div>
       </div>
     </div>

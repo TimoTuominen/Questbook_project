@@ -22,8 +22,10 @@ var utc = new Date().toJSON().slice(0, 10).replace(/-/g, "/");
 const guestinfo = fs.readFileSync(`${__dirname}/guestinfo.html`, "utf8");
 const guestbook = fs.readFileSync(`${__dirname}/guestbook.html`, "utf8");
 let data = fs.readFileSync(`${__dirname}/questdata.json`, "utf8");
+let data2 = fs.readFileSync("./static/questdata.json", "utf8");
 // Muokataan haettu data käsiteltävään muotoon, loopataan sen läpi ja funktion "replaceTemplate" avulla korvataan halutut kohdat
 let guestdata = JSON.parse(data);
+let vierasdata = JSON.parse(data2);
 let guesthtml = guestdata.map((el) => replaceTemplate(guestinfo, el)).join("");
 let output = guestbook.replace("%guesttemplate%", guesthtml);
 let guestlenght = guestdata.length;
@@ -71,9 +73,27 @@ app.get("/ajaxmessage", (req, res) => {
 
 app.post("/ajaxmessage", (req, res) => {
   console.log(req.body);
-  let name2 = req.body.name;
-  let country2 = req.body.country;
-  let message2 = req.body.message;
+  //let name2 = req.body.name;
+  //let country2 = req.body.country;
+  //let message2 = req.body.message;
+
+  let lisattava = {
+    id: guestlenght + 1,
+    username: req.body.name,
+    country: req.body.country,
+    date: utc,
+    message: req.body.message
+  };
+
+  vierasdata.push(lisattava);
+  let newData = JSON.stringify(vierasdata, null, 2);
+  fs.writeFile("static/questdata.json", newData, (err) => {
+    // error checking
+    if (err) throw err;
+
+    console.log("New data added");
+  });
+
   res.status(204).send();
 });
 
