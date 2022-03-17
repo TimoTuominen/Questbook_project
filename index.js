@@ -21,8 +21,8 @@ var utc = new Date().toJSON().slice(0, 10).replace(/-/g, "/");
 // Luetaan tiedostoja käyttöä varten
 const guestinfo = fs.readFileSync(`${__dirname}/guestinfo.html`, "utf8");
 const guestbook = fs.readFileSync(`${__dirname}/guestbook.html`, "utf8");
-let data = fs.readFileSync(`${__dirname}/questdata.json`, "utf8");
-let data2 = fs.readFileSync("./static/questdata.json", "utf8");
+let data = fs.readFileSync(`${__dirname}/questdata.json`, "utf8"); // JSON tiedosto New message välilehdelle
+let data2 = fs.readFileSync("./static/questdata.json", "utf8"); // JSON tiedosto AJAX message välilehdelle
 // Muokataan haettu data käsiteltävään muotoon, loopataan sen läpi ja funktion "replaceTemplate" avulla korvataan halutut kohdat
 let guestdata = JSON.parse(data);
 let vierasdata = JSON.parse(data2);
@@ -72,11 +72,7 @@ app.get("/ajaxmessage", (req, res) => {
 });
 
 app.post("/ajaxmessage", (req, res) => {
-  console.log(req.body);
-  //let name2 = req.body.name;
-  //let country2 = req.body.country;
-  //let message2 = req.body.message;
-
+  // Luodaan JSON data AJAX message välilehden tietojen lisäämistä varten
   let lisattava = {
     id: guestlenght + 1,
     username: req.body.name,
@@ -84,7 +80,7 @@ app.post("/ajaxmessage", (req, res) => {
     date: utc,
     message: req.body.message
   };
-
+  // Lisätään data ja muotoillaan JSON tiedosto nätimmäksi
   vierasdata.push(lisattava);
   let newData = JSON.stringify(vierasdata, null, 2);
   fs.writeFile("static/questdata.json", newData, (err) => {
